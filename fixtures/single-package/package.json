@@ -1,0 +1,33 @@
+{
+  "name": "single-fixture",
+  "version": "1.2.3",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://example.com/single-fixture.git"
+  },
+  "packageManager": "npm@10.0.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node --test"
+  },
+  "bin": {
+    "single-fixture": "./bin/cli.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "dependencies": {
+    "kleur": "^4.1.5"
+  },
+  "devDependencies": {
+    "typescript": "~5.4.5"
+  }
+}
