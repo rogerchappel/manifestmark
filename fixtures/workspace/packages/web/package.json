@@ -1,0 +1,15 @@
+{
+  "name": "@fixture/web",
+  "version": "0.1.0",
+  "packageManager": "npm@10.0.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/missing-build.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "react": "*"
+  }
+}
