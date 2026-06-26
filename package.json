@@ -16,6 +16,7 @@
   },
   "files": [
     "dist",
+    "fixtures",
     "README.md",
     "LICENSE",
     "SECURITY.md",
@@ -26,9 +27,9 @@
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test dist/**/*.test.js",
-    "smoke": "npm run build && node dist/cli.js scan fixtures/single-package && node dist/cli.js scan fixtures/workspace --format json",
-    "package:smoke": "npm pack --dry-run",
-    "release:check": "npm test && npm run package:smoke"
+    "smoke": "bash scripts/smoke.sh",
+    "package:smoke": "bash scripts/package-smoke.sh",
+    "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke"
   },
   "keywords": [
     "cli",
