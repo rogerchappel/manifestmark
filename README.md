@@ -33,8 +33,14 @@ npm run smoke
 The smoke command currently expands to:
 
 ```sh
-npm run build && node dist/cli.js scan fixtures/single-package && node dist/cli.js scan fixtures/workspace --format json
+bash scripts/smoke.sh
 ```
+
+It checks a clean single-package fixture, asserts the expected workspace fixture
+error, and exercises the script-summary view.
+
+The package smoke builds a real tarball, installs it into a temporary app, then
+checks the installed `manifestmark` binary against the packaged fixtures.
 ## Verification
 
 ```sh
