@@ -17,14 +17,22 @@ cd manifestmark
 npm install
 npm run build
 ```
-## CLI quickstart
+## Quickstart
 
 Start with the built CLI help so the examples match the checked-out version:
 
 ```sh
 node dist/cli.js --help
 ```
-Run the maintained smoke fixture to exercise the main workflow end to end:
+
+Scan the clean single-package fixture and render the workspace script plan:
+
+```sh
+node dist/cli.js scan fixtures/single-package
+node dist/cli.js scripts fixtures/workspace --task test
+```
+
+To exercise the main workflow end to end, run the maintained smoke fixture:
 
 ```sh
 npm run smoke
