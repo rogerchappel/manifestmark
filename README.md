@@ -49,6 +49,18 @@ error, and exercises the script-summary view.
 
 The package smoke builds a real tarball, installs it into a temporary app, then
 checks the installed `manifestmark` binary against the packaged fixtures.
+
+## Demo
+
+Run the checked-in fixture demo:
+
+```sh
+bash demo/run-manifest-review.sh
+```
+
+The walkthrough in [docs/tutorials/review-package-manifests.md](docs/tutorials/review-package-manifests.md)
+explains the clean package report, workspace JSON error, and script summary.
+Promotion notes live in [docs/promo/social-hooks.md](docs/promo/social-hooks.md).
 ## Verification
 
 ```sh
