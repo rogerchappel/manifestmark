@@ -61,6 +61,15 @@ bash demo/run-manifest-review.sh
 The walkthrough in [docs/tutorials/review-package-manifests.md](docs/tutorials/review-package-manifests.md)
 explains the clean package report, workspace JSON error, and script summary.
 Promotion notes live in [docs/promo/social-hooks.md](docs/promo/social-hooks.md).
+
+For a focused script-handoff demo, run:
+
+```sh
+bash demo/run-script-inventory.sh
+```
+
+See [docs/tutorials/script-inventory.md](docs/tutorials/script-inventory.md) for
+the generated build/test inventory flow.
 ## Verification
 
 ```sh
