@@ -1,0 +1,6 @@
+{
+  "name": "manifest-set-one",
+  "private": true,
+  "license": "MIT",
+  "repository": "https://example.com/manifest-set"
+}
