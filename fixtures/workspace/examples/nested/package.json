@@ -1,0 +1,6 @@
+{
+  "name": "nested-non-member-fixture",
+  "scripts": {
+    "build": "node scripts/intentionally-missing.js"
+  }
+}

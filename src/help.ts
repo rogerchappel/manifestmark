@@ -9,6 +9,10 @@ export function helpText(): string {
     "Examples:",
     "  manifestmark scan .",
     "  manifestmark scan . --format json",
-    "  manifestmark scripts . --task test"
+    "  manifestmark scripts . --task test",
+    "",
+    "Scan boundaries:",
+    "  A root package includes only packages matched by its workspaces patterns.",
+    "  A path without a root package.json is searched recursively."
   ].join("\n") + "\n";
 }

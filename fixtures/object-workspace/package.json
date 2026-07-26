@@ -1,0 +1,11 @@
+{
+  "name": "object-workspace-fixture",
+  "private": true,
+  "license": "MIT",
+  "repository": "https://example.com/object-workspace-fixture",
+  "workspaces": {
+    "packages": [
+      "modules/*"
+    ]
+  }
+}

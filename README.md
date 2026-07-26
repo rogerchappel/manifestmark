@@ -32,6 +32,18 @@ node dist/cli.js scan fixtures/single-package
 node dist/cli.js scripts fixtures/workspace --task test
 ```
 
+### Scan boundaries
+
+When the target contains a root `package.json`, ManifestMark scans that root and
+only the package directories matched by its `workspaces` array or
+`workspaces.packages` object. A nested `package.json` that does not match a
+workspace pattern is not treated as a member. This keeps examples, fixtures,
+and other nested manifests outside the declared workspace out of the report.
+
+When the target does not contain a root `package.json`, ManifestMark recursively
+scans all package manifests below it, except manifests in ignored directories
+such as `node_modules` and `.git`.
+
 To exercise the main workflow end to end, run the maintained smoke fixture:
 
 ```sh
