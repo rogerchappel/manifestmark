@@ -16,10 +16,30 @@ describe("scan", () => {
     const issueIds = result.issues.map((issue) => issue.id);
 
     assert.equal(result.packageCount, 3);
+    assert.deepEqual(
+      result.packages.map((pkg) => pkg.path),
+      [
+        "package.json",
+        "packages/api/package.json",
+        "packages/web/package.json"
+      ]
+    );
     assert.equal(result.workspace.detected, true);
     assert.ok(issueIds.includes("missing-script-file"));
     assert.ok(issueIds.includes("inconsistent-package-manager"));
     assert.ok(issueIds.includes("inconsistent-engine"));
     assert.ok(issueIds.includes("broad-dependency-range"));
+  });
+
+  it("supports object workspace patterns", async () => {
+    const result = await scan("fixtures/object-workspace");
+
+    assert.deepEqual(
+      result.packages.map((pkg) => pkg.path),
+      [
+        "modules/core/package.json",
+        "package.json"
+      ]
+    );
   });
 });
