@@ -91,6 +91,19 @@ npm run smoke
 npm run package:smoke
 npm run release:check
 ```
+
+## Releases
+
+Version tags matching `v*.*.*` run the full `release:check` suite, including a
+real install of the packed tarball. The release workflow then packs one final
+artifact, publishes that exact tarball to the public `manifestmark` npm package
+with npm provenance, and only after a successful publication creates the
+GitHub release with the same tarball attached.
+
+Publishing uses GitHub Actions trusted publishing (OIDC), so the npm package
+must trust this repository's `release.yml` workflow; no long-lived npm token is
+required by the workflow.
+
 ## CLI Help Smoke
 
 Confirm the packaged command starts and prints its help text before relying on a release tarball or downstream automation:
