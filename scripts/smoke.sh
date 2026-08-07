@@ -17,7 +17,7 @@ workspace_status=$?
 set -e
 
 test "$workspace_status" -eq 1
-node -e "const fs=require('node:fs'); const data=JSON.parse(fs.readFileSync(process.argv[1], 'utf8')); if (!data.issues.some((issue) => issue.id === 'missing-script-file' && issue.severity === 'error')) process.exit(1);" "$tmp/workspace.json"
+node -e "const fs=require('node:fs'); const data=JSON.parse(fs.readFileSync(process.argv[1], 'utf8')); if (data.packageCount !== 4 || !data.packages.some((pkg) => pkg.path === 'apps/admin/package.json') || !data.issues.some((issue) => issue.id === 'missing-script-file' && issue.severity === 'error')) process.exit(1);" "$tmp/workspace.json"
 
 node dist/cli.js scripts fixtures/workspace --task test >"$tmp/workspace-scripts.md"
 grep -q 'pnpm -r test' "$tmp/workspace-scripts.md"

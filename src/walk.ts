@@ -61,12 +61,18 @@ function globMatcher(pattern: string): RegExp {
     .replaceAll("\\", "/")
     .replace(/^\.\//, "")
     .replace(/\/+$/, "");
+  const expanded = expandBraces(normalized);
+
+  return new RegExp(`^(?:${expanded.map(globSource).join("|")})$`);
+}
+
+function globSource(pattern: string): string {
   let source = "";
 
-  for (let index = 0; index < normalized.length; index += 1) {
-    const char = normalized[index];
-    if (char === "*" && normalized[index + 1] === "*") {
-      if (normalized[index + 2] === "/") {
+  for (let index = 0; index < pattern.length; index += 1) {
+    const char = pattern[index];
+    if (char === "*" && pattern[index + 1] === "*") {
+      if (pattern[index + 2] === "/") {
         source += "(?:.*/)?";
         index += 2;
       } else {
@@ -82,5 +88,52 @@ function globMatcher(pattern: string): RegExp {
     }
   }
 
-  return new RegExp(`^${source}$`);
+  return source;
+}
+
+function expandBraces(pattern: string): string[] {
+  const opening = pattern.indexOf("{");
+  if (opening === -1) {
+    return [pattern];
+  }
+
+  let depth = 0;
+  for (let index = opening; index < pattern.length; index += 1) {
+    if (pattern[index] === "{") {
+      depth += 1;
+    } else if (pattern[index] === "}") {
+      depth -= 1;
+      if (depth === 0) {
+        const alternatives = splitBraceAlternatives(pattern.slice(opening + 1, index));
+        if (alternatives.length < 2) {
+          return [pattern];
+        }
+        const prefix = pattern.slice(0, opening);
+        const suffix = pattern.slice(index + 1);
+        return alternatives.flatMap((alternative) => expandBraces(`${prefix}${alternative}${suffix}`));
+      }
+    }
+  }
+
+  return [pattern];
+}
+
+function splitBraceAlternatives(value: string): string[] {
+  const alternatives: string[] = [];
+  let depth = 0;
+  let start = 0;
+
+  for (let index = 0; index < value.length; index += 1) {
+    if (value[index] === "{") {
+      depth += 1;
+    } else if (value[index] === "}") {
+      depth -= 1;
+    } else if (value[index] === "," && depth === 0) {
+      alternatives.push(value.slice(start, index));
+      start = index + 1;
+    }
+  }
+
+  alternatives.push(value.slice(start));
+  return alternatives;
 }
