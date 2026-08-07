@@ -13,6 +13,6 @@ describe("formatters", () => {
   it("renders parseable json reports", async () => {
     const report = renderResult(await scan("fixtures/workspace"), "json");
     const parsed = JSON.parse(report);
-    assert.equal(parsed.packageCount, 3);
+    assert.equal(parsed.packageCount, 4);
   });
 });
