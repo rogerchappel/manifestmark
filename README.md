@@ -39,6 +39,18 @@ only the package directories matched by its `workspaces` array or
 `workspaces.packages` object. A nested `package.json` that does not match a
 workspace pattern is not treated as a member. This keeps examples, fixtures,
 and other nested manifests outside the declared workspace out of the report.
+Workspace patterns support `*`, `**`, `?`, negation with a leading `!`, and
+comma-separated brace alternatives such as `{packages,apps}/*` (including
+nested alternatives).
+
+The checked-in workspace fixture executes that brace pattern. Build and verify
+that packages beneath both alternatives are present in JSON output:
+
+```sh
+npm run build
+node dist/cli.js scan fixtures/workspace --format json > /tmp/manifestmark-workspace.json || test $? -eq 1
+node -e "const r=require('/tmp/manifestmark-workspace.json'); for (const p of ['apps/admin/package.json','packages/api/package.json']) if (!r.packages.some(x => x.path === p)) process.exit(1)"
+```
 
 When the target does not contain a root `package.json`, ManifestMark recursively
 scans all package manifests below it, except manifests in ignored directories
