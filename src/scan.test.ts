@@ -16,10 +16,11 @@ describe("scan", () => {
     const result = await scan("fixtures/workspace");
     const issueIds = result.issues.map((issue) => issue.id);
 
-    assert.equal(result.packageCount, 3);
+    assert.equal(result.packageCount, 4);
     assert.deepEqual(
       result.packages.map((pkg) => pkg.path),
       [
+        "apps/admin/package.json",
         "package.json",
         "packages/api/package.json",
         "packages/web/package.json"
@@ -30,6 +31,12 @@ describe("scan", () => {
     assert.ok(issueIds.includes("inconsistent-package-manager"));
     assert.ok(issueIds.includes("inconsistent-engine"));
     assert.ok(issueIds.includes("broad-dependency-range"));
+    assert.deepEqual(result.workspace.packageManagers, ["npm@10.0.0", "pnpm@9.0.0"]);
+    assert.deepEqual(Object.keys(result.workspace.engines).sort(), [
+      "node@>=18",
+      "node@>=20",
+      "node@>=22"
+    ]);
   });
 
   it("supports object workspace patterns", async () => {
