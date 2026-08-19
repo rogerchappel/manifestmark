@@ -13,6 +13,11 @@ npm pack --pack-destination "$tmp" >/dev/null
 package_tgz="$(find "$tmp" -maxdepth 1 -name 'manifestmark-*.tgz' -print -quit)"
 test -n "$package_tgz"
 
+if tar -tzf "$package_tgz" | grep -Eq '\.test\.(js|d\.ts)$'; then
+  echo 'packed manifestmark tarball contains compiled test artifacts' >&2
+  exit 1
+fi
+
 mkdir -p "$tmp/app"
 cd "$tmp/app"
 npm init -y >/dev/null
