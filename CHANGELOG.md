@@ -7,6 +7,10 @@ format and uses semantic versioning when versioned releases are published.
 
 ## [Unreleased]
 
+### Fixed
+
+- Exclude compiled test JavaScript and declarations from the published package.
+
 ### Added
 
 - Initial project setup.
