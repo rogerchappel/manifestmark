@@ -106,8 +106,13 @@ npm run release:check
 
 ## Releases
 
-Version tags matching `v*.*.*` run the full `release:check` suite, including a
-real install of the packed tarball. The release workflow then packs one final
+Release tags must be exactly `v<package.json version>`. For example, version
+`0.1.0` must be released from tag `v0.1.0`; `v0.2.0` is rejected before npm
+publishing. Run the same preflight locally with
+`npm run release:tag-check -- v0.1.0`.
+
+Matching version tags run the full `release:check` suite, including a real
+install of the packed tarball. The release workflow then packs one final
 artifact, publishes that exact tarball to the public `manifestmark` npm package
 with npm provenance, and only after a successful publication creates the
 GitHub release with the same tarball attached.
