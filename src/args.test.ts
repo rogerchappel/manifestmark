@@ -19,4 +19,29 @@ describe("parseArgs", () => {
       task: "test"
     });
   });
+
+  it("rejects multiple positional targets", () => {
+    assert.throws(
+      () => parseArgs(["scan", "first", "second"]),
+      /Only one target path may be provided/
+    );
+  });
+
+  it("rejects task filtering for scan", () => {
+    assert.throws(
+      () => parseArgs(["scan", ".", "--task", "test"]),
+      /--task is only supported by the scripts command/
+    );
+  });
+
+  it("rejects output formatting for scripts", () => {
+    assert.throws(
+      () => parseArgs(["scripts", ".", "--format", "json"]),
+      /--format is only supported by the scan command/
+    );
+  });
+
+  it("rejects an empty inline task", () => {
+    assert.throws(() => parseArgs(["scripts", ".", "--task="]), /--task requires a value/);
+  });
 });

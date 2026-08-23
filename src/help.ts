@@ -5,6 +5,7 @@ export function helpText(): string {
     "Usage:",
     "  manifestmark scan <path> [--format markdown|json]",
     "  manifestmark scripts <path> [--task <name>]",
+    "  Provide at most one path. --format belongs to scan; --task belongs to scripts.",
     "",
     "Examples:",
     "  manifestmark scan .",

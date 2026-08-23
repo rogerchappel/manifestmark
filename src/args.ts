@@ -11,6 +11,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
   const [rawCommand, ...rest] = argv;
   const command = normalizeCommand(rawCommand);
   const parsed: ParsedArgs = { command, target: ".", format: "markdown" };
+  let hasTarget = false;
 
   for (let index = 0; index < rest.length; index += 1) {
     const arg = rest[index];
@@ -23,19 +24,35 @@ export function parseArgs(argv: string[]): ParsedArgs {
       parsed.task = requiredValue(rest, index, "--task");
       index += 1;
     } else if (arg.startsWith("--task=")) {
-      parsed.task = arg.slice("--task=".length);
+      parsed.task = requiredInlineValue(arg.slice("--task=".length), "--task");
     } else if (arg === "--help" || arg === "-h") {
       parsed.command = "help";
     } else if (arg === "--version" || arg === "-v") {
       parsed.command = "version";
     } else if (!arg.startsWith("-")) {
+      if (hasTarget) {
+        throw new Error("Only one target path may be provided");
+      }
       parsed.target = arg;
+      hasTarget = true;
     } else {
       throw new Error("Unknown option: " + arg);
     }
   }
 
+  if (parsed.command === "scan" && parsed.task !== undefined) {
+    throw new Error("--task is only supported by the scripts command");
+  }
+  if (parsed.command === "scripts" && parsed.format !== "markdown") {
+    throw new Error("--format is only supported by the scan command");
+  }
+
   return parsed;
+}
+
+function requiredInlineValue(value: string, option: string): string {
+  if (!value) throw new Error(option + " requires a value");
+  return value;
 }
 
 function normalizeCommand(command: string | undefined): ParsedArgs["command"] {

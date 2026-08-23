@@ -32,6 +32,9 @@ node dist/cli.js scan fixtures/single-package
 node dist/cli.js scripts fixtures/workspace --task test
 ```
 
+Each command accepts at most one target path. `--format` is available only for
+`scan`, and `--task` is available only for `scripts` and requires a non-empty name.
+
 ### Scan boundaries
 
 When the target contains a root `package.json`, ManifestMark scans that root and

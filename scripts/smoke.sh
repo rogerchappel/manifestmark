@@ -22,4 +22,19 @@ node -e "const fs=require('node:fs'); const data=JSON.parse(fs.readFileSync(proc
 node dist/cli.js scripts fixtures/workspace --task test >"$tmp/workspace-scripts.md"
 grep -q 'pnpm -r test' "$tmp/workspace-scripts.md"
 
+assert_cli_error() {
+  local expected="$1"
+  shift
+  if node dist/cli.js "$@" >"$tmp/invalid.out" 2>"$tmp/invalid.err"; then
+    echo "expected command to fail: $*" >&2
+    return 1
+  fi
+  grep -Fq -- "$expected" "$tmp/invalid.err"
+}
+
+assert_cli_error 'Only one target path may be provided' scan fixtures/single-package fixtures/workspace
+assert_cli_error '--task is only supported by the scripts command' scan fixtures/single-package --task test
+assert_cli_error '--format is only supported by the scan command' scripts fixtures/single-package --format json
+assert_cli_error '--task requires a value' scripts fixtures/single-package --task=
+
 echo 'manifestmark smoke passed'
