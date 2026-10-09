@@ -13,7 +13,17 @@ npm pack --pack-destination "$tmp" >/dev/null
 package_tgz="$(find "$tmp" -maxdepth 1 -name 'manifestmark-*.tgz' -print -quit)"
 test -n "$package_tgz"
 
-if tar -tzf "$package_tgz" | grep -Eq '\.test\.(js|d\.ts)$'; then
+tar -tzf "$package_tgz" >"$tmp/tarball-files.txt"
+
+# Check the package contract, not only the absence of test artifacts.
+for required in package/package.json package/README.md package/LICENSE package/dist/cli.js package/dist/index.js package/dist/index.d.ts package/fixtures/single-package/package.json package/fixtures/workspace/package.json; do
+  if ! grep -Fxq "$required" "$tmp/tarball-files.txt"; then
+    echo "packed manifestmark tarball is missing $required" >&2
+    exit 1
+  fi
+done
+
+if grep -Eq '(^|/)dist/.*\.test\.(js|d\.ts)$' "$tmp/tarball-files.txt"; then
   echo 'packed manifestmark tarball contains compiled test artifacts' >&2
   exit 1
 fi

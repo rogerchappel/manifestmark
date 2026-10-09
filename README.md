@@ -74,8 +74,11 @@ bash scripts/smoke.sh
 It checks a clean single-package fixture, asserts the expected workspace fixture
 error, and exercises the script-summary view.
 
-The package smoke builds a real tarball, installs it into a temporary app, then
-checks the installed `manifestmark` binary against the packaged fixtures.
+The package smoke builds a real tarball, verifies that its public CLI, library
+entry points, metadata, and runtime fixtures are present (and compiled tests are
+excluded), then installs it into a temporary app and checks the installed
+`manifestmark` binary against the packaged fixtures. Run `npm run package:smoke`
+to reproduce this distributable-archive check.
 
 ## Demo
 
