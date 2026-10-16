@@ -52,7 +52,7 @@
   },
   "homepage": "https://github.com/rogerchappel/manifestmark#readme",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.17.0"
   },
   "packageManager": "npm@11.17.0",
   "devDependencies": {
