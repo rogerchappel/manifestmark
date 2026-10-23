@@ -48,3 +48,21 @@ it("ignores symlinked package manifests and does not traverse directory symlinks
     assert.deepEqual(await readdir(inside), ["linked-directory", "linked-package.json", "package.json"]);
   });
 });
+
+
+it("reports malformed workspace patterns with their pattern and a controlled error", async () => {
+  const root = await mkdtemp(join(tmpdir(), "manifestmark-pattern-"));
+  try {
+    await mkdir(join(root, "packages", "one"), { recursive: true });
+    await writeFile(join(root, "package.json"), JSON.stringify({ workspaces: ["packages/*", "[broken"] }));
+    await writeFile(join(root, "packages", "one", "package.json"), JSON.stringify({ name: "one" }));
+    await assert.rejects(findPackageJsonFiles(root), (error: unknown) => {
+      assert.ok(error instanceof Error);
+      assert.match(error.message, /Invalid workspace pattern "\[broken":/);
+      assert.ok(error.cause instanceof Error);
+      return true;
+    });
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});

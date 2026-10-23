@@ -46,12 +46,21 @@ function matchesWorkspace(root: string, manifestPath: string, patterns: string[]
     .split(sep)
     .slice(0, -1)
     .join("/");
-  const included = patterns
-    .filter((pattern) => !pattern.startsWith("!"))
-    .some((pattern) => globMatcher(pattern).test(packageDir));
-  const excluded = patterns
-    .filter((pattern) => pattern.startsWith("!"))
-    .some((pattern) => globMatcher(pattern.slice(1)).test(packageDir));
+  const matchers = patterns.map((pattern) => {
+    try {
+      const exclude = pattern.startsWith("!");
+      return { exclude, matcher: globMatcher(exclude ? pattern.slice(1) : pattern) };
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new Error(`Invalid workspace pattern ${JSON.stringify(pattern)}: ${detail}`, { cause: error });
+    }
+  });
+  const included = matchers
+    .filter(({ exclude }) => !exclude)
+    .some(({ matcher }) => matcher.test(packageDir));
+  const excluded = matchers
+    .filter(({ exclude }) => exclude)
+    .some(({ matcher }) => matcher.test(packageDir));
 
   return included && !excluded;
 }
@@ -61,6 +70,9 @@ function globMatcher(pattern: string): RegExp {
     .replaceAll("\\", "/")
     .replace(/^\.\//, "")
     .replace(/\/+$/, "");
+  if (/[\[\]]/.test(normalized)) {
+    throw new Error("character classes are not supported");
+  }
   const expanded = expandBraces(normalized);
 
   return new RegExp(`^(?:${expanded.map(globSource).join("|")})$`);
